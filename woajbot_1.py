@@ -3,7 +3,7 @@
 import asyncio
 import datetime
 import json
-import os
+import os.path
 import random
 import string
 import sys
@@ -14,8 +14,12 @@ from discord.ext import commands
 
 # TODO New Commands
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-1: Do this!
-
+1: Add a level system for the bot and reset the current level system.
+2. Create a prompt for when people join the discord.
+3. Create a working database of the pb's of people.
+4. Quicklinks
+5. Release to the public
+6. Add the wca database
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 
@@ -32,10 +36,10 @@ if acc_name == "main":
     token = jsontoken.get("token")
 
 if jsontoken == 0:
-    print("WOAJ!!! You need a token to go online. Use 'Main' or 'Test")
+    print("WOAJ!!! You need a token to go online.")
     exit(0)
 
-print("Token being used: {}".format(jsontoken.get("token")))
+print("Token being used: {0}".format(jsontoken.get("token")))
 print("Connecting...")
 
 embed_color = 0x1abc9c
@@ -51,6 +55,12 @@ async def on_ready():
     server_list = list(client.servers)
 
     print("============================================================")
+    print("                         _ ____        __ ")
+    print(" _      ______  ____ _  (_) __ )____  / /_")
+    print("| | /| / / __ \/ __ `/ / / __  / __ \/ __/")
+    print("| |/ |/ / /_/ / /_/ / / / /_/ / /_/ / /_ ")
+    print("|__/|__/\____/\__,_/_/ /_____/\____/\__/  ")
+    print("                  /___/                 ")
     print("• Version:                   {}".format(discord.__version__))
     print("• Client Name:               {}".format(client.user))
     print("• Client ID:                 {}".format(client.user.id))
@@ -71,14 +81,70 @@ async def on_resumed():
 @client.event
 async def on_message(message):
     # Message author variables
-
     user_id = message.author.id
     user_name = message.author
+
+    # xp and karma
+    user_add_xp(message.author.id, 2)
+
     if user_id == client.user:
         return
+
+    print("{0} sent message '{1}' in #{2}".format(message.author.nick, message.content, message.channel))
 
     # Ping Command
     if message.content.upper().startswith(".PING"):
         await client.send_message(message.channel, "Pong! :ping_pong:")
+    elif message.content.startswith('.info'):
+        msg = 'We are a cubing Discord channel that is an attempted substitute for the pizza friends group chat. ' \
+              'Many people have complained about the lacking features that Facebook messenger gives people as well as' \
+              'the lack of privacy Facebook gives its users. This will also help fix clutter in messages, as well as ' \
+              'help organize conversations. Although new laws have been passed about privacy Discord is in all ways ' \
+              'better then messenger. Many things will be added as time goes on. Stay tuned to see new cool features ' \
+              'being added! {0.author.mention}'.format(message)
+        await client.send_message(message.channel, msg)
+    elif message.content.startswith('.bot'):
+        msg = 'Do .bot for all possible commands. '
+        await client.send_message(message.channel, msg)
+        msg = 'Do .info for information about the server.'
+        await client.send_message(message.channel, msg)
+        msg = 'Do .ping responds with PONG'
+        await client.send_message(message.channel, msg)
+        msg = 'Do .xp to see the amount of xp you currently have.'
+        await client.send_message(message.channel, msg)
+
+    if message.content.lower().startswith(".xp"):
+        await client.send_message(message.channel, "You have {} XP!".format(get_xp(message.author.id)))
+
+
+def user_add_xp(user_id: int, xp: int):
+    if os.path.isfile("users.json"):
+        try:
+            with open('users.json', 'r') as fp:
+                users = json.load(fp)
+            users[user_id]['xp'] += xp
+            with open('users.json', 'w') as fp:
+                json.dump(users, fp, sort_keys=True, indent=4)
+        except KeyError:
+            with open('users.json', 'r') as fp:
+                users = json.load(fp)
+            users[user_id] = {}
+            users[user_id]['xp'] = xp
+            with open('users.json', 'w') as fp:
+                json.dump(users, fp, sort_keys=True, indent=4)
+    else:
+        users = {user_id: {}}
+        users[user_id]['xp'] = xp
+        with open('users.json', 'w') as fp:
+            json.dump(users, fp, sort_keys=True, indent=4)
+
+
+def get_xp(user_id: int):
+    if os.path.isfile('users.json'):
+        with open('users.json', 'r') as fp:
+            users = json.load(fp)
+        return users[user_id]['xp']
+    else:
+        return 0
 
 client.run(token)
