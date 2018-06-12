@@ -116,23 +116,26 @@ async def on_message(message):
         await client.send_message(message.channel, msg)
         msg = 'Do .test to see the current test feature I am trying to impletment'
         await client.send_message(message.channel, msg)
-    elif message.content.startswith('.andrew'):
-        await client.send_message(message.channel, 'Guess a number between 1 to 10')
+
     elif message.content.startswith('.test'):
         await client.send_message(message.channel, random.choice(['What state was Chris Hardwick delegate for in 2013',
                                                                   'What state does David Jiang live in?',
                                                                   'What state does the current foot single world record'
                                                                   ' holder live in?', ]))
-        def guess_check(m):
+
+    elif message.content.startswith('.andrew'):
+        await client.send_message(message.channel, 'Guess a number between 1 to 10')
+
+        def andrew_check(m):
             return m.content.isdigit()
 
-        guess = await client.wait_for_message(timeout=5.0, author=message.author, check=guess_check)
+        andrew = await client.wait_for_message(timeout=5.0, author=message.author, check=andrew_check)
         answer = random.randint(1, 10)
-        if guess is None:
+        if andrew is None:
             fmt = 'Sorry, you took too long. It was {}.'
             await client.send_message(message.channel, fmt.format(answer))
             return
-        if int(guess.content) == answer:
+        if int(andrew.content) == answer:
             await client.send_message(message.channel, 'You are right!')
         else:
             await client.send_message(message.channel, 'Sorry. It is actually {}.'.format(answer))
