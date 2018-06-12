@@ -10,29 +10,22 @@ import sys
 import math
 import discord
 from discord.ext import commands
-from discord.ext.commands import Bot
 # from urbandictionary_top import udtop
 
 # TODO New Commands
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-* Add a level system for the bot and reset the current level system.
-* State guessing game, update and add questions as time goes on.
-* Create a .xp @someone system where you can find out the xp of other people
-* Create a .xp_rank to find out the leader boards for xp
-* Create a prompt for when people join the discord.
-* Create a working database of the pb's of people.
-* Quicklinks
-* Release to the public
-* Add the wca database
+1: Add a level system for the bot and reset the current level system.
+2. Create a prompt for when people join the discord.
+3. Create a working database of the pb's of people.
+4. Quicklinks
+5. Release to the public
+6. Add the wca database
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-BOT_PREFIX = (".")
 
 
 def get_json(file_path):
     with open(file_path, 'r') as fp:
         return json.load(fp)
-
 
 acc_name = "main"
 jsontoken = 0
@@ -119,57 +112,37 @@ async def on_message(message):
         await client.send_message(message.channel, msg)
         msg = 'Do .xp to see the amount of xp you currently have.'
         await client.send_message(message.channel, msg)
-        msg = 'Do .guess to play a guessing game with the bot.'
+        msg = 'Do .andrew for a guessing game (maybe .guess depends.)'
         await client.send_message(message.channel, msg)
-        #XP
-    elif message.content.lower().startswith(".xp"):
+        msg = 'Do .test to see the current test feature I am trying to impletment'
+        await client.send_message(message.channel, msg)
+    elif message.content.startswith('.andrew'):
+        await client.send_message(message.channel, 'Guess a number between 1 to 10')
+    elif message.content.startswith('.test'):
+        await client.send_message(message.channel, random.choice(['What state was Chris Hardwick delegate for in 2013',
+                                                                  'What state does David Jiang live in?',
+                                                                  'What state does the current foot single world record'
+                                                                  ' holder live in?', ]))
+        def guess_check(m):
+            return m.content.isdigit()
+
+        guess = await client.wait_for_message(timeout=5.0, author=message.author, check=guess_check)
+        answer = random.randint(1, 10)
+        if guess is None:
+            fmt = 'Sorry, you took too long. It was {}.'
+            await client.send_message(message.channel, fmt.format(answer))
+            return
+        if int(guess.content) == answer:
+            await client.send_message(message.channel, 'You are right!')
+        else:
+            await client.send_message(message.channel, 'Sorry. It is actually {}.'.format(answer))
+
+
+    if message.content.lower().startswith(".xp"):
         await client.send_message(message.channel, "You have {} XP!".format(get_xp(message.author.id)))
 
-        #Guessing Game
-    elif message.content.startswith('.guess'):
-        await client.send_message(message.channel, 'Guess a number between 1 to 10')
 
-        def guess_check(m):
-            return m.content.isdigit()
-
-        guess = await client.wait_for_message(timeout=5.0, author=message.author, check=guess_check)
-        answer = random.randint(1, 10)
-        if guess is None:
-            fmt = 'Sorry, you took too long. It was {}.'
-            await client.send_message(message.channel, fmt.format(answer))
-            return
-        if int(guess.content) == answer:
-            await client.send_message(message.channel, 'You are right!')
-        else:
-            await client.send_message(message.channel, 'Sorry. It is actually {}.'.format(answer))
-
-
-
-async def on_message(message):
-    # we do not want the bot to reply to itself
-    if message.author == client.user:
-        return
-
-    if message.content.startswith('$guess'):
-        await client.send_message(message.channel, 'Guess a number between 1 to 10')
-
-        def guess_check(m):
-            return m.content.isdigit()
-
-        guess = await client.wait_for_message(timeout=5.0, author=message.author, check=guess_check)
-        answer = random.randint(1, 10)
-        if guess is None:
-            fmt = 'Sorry, you took too long. It was {}.'
-            await client.send_message(message.channel, fmt.format(answer))
-            return
-        if int(guess.content) == answer:
-            await client.send_message(message.channel, 'You are right!')
-        else:
-            await client.send_message(message.channel, 'Sorry. It is actually {}.'.format(answer))
-
-
-def user_add_xp(user_id: int, xp: int
-                ):
+def user_add_xp(user_id: int, xp: int):
     if os.path.isfile("users.json"):
         try:
             with open('users.json', 'r') as fp:
@@ -199,46 +172,5 @@ def get_xp(user_id: int):
     else:
         return 0
 
-
-async def on_message(message):
-    # we do not want the bot to reply to itself
-    if message.author == client.user:
-        return
-
-    if message.content.startswith('.guess'):
-        await client.send_message(message.channel, 'Guess a number between 1 to 10')
-
-        def guess_check(m):
-            return m.content.isdigit()
-
-        guess = await client.wait_for_message(timeout=5.0, author=message.author, check=guess_check)
-        answer = random.randint(1, 10)
-        if guess is None:
-            fmt = 'Sorry, you took too long. It was {}.'
-            await client.send_message(message.channel, fmt.format(answer))
-            return
-        if int(guess.content) == answer:
-            await client.send_message(message.channel, 'You are right!')
-        else:
-            await client.send_message(message.channel, 'Sorry. It is actually {}.'.format(answer))
-
-client = Bot(command_prefix=BOT_PREFIX)
-
-
-@client.command()
-async def state_game():
-    possible_responses = [
-        'Possible question 1',
-        'Possible question2',
-        'Possible question 3',
-    ]
-    await client.say(random.choice(possible_responses))
-
-
-
-async def on_member_join(member):
-    server = member.server
-    fmt = 'Welcome {0.mention} to {1.name}!'
-    await client.send_message(server, fmt.format(member, server))
 
 client.run(token)
