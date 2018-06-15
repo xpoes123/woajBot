@@ -49,6 +49,7 @@ def get_time():
 
     return "{0}:{1}:{2} {3}".format(cur_hour, cur_min, cur_sec, am_or_pm)
 
+
 acc_name = "main"
 jsontoken = 0
 
@@ -132,37 +133,66 @@ async def on_message(message):
         await client.send_message(message.channel, 'Do `.xp` to see the amount of xp you currently have.')
         await client.send_message(message.channel, 'Do `.guess` to play a guessing game with the bot.')
 
+#State game
     elif message.content.startswith(".test"):
+
         print("{0}: {1} requested '.test'".format(get_time(), user_name))
 
         def get_answer(answer_number):
+
             if answer_number == 1:
-                return "1"
+
+                return "QUESTION ONE"
+
             elif answer_number == 2:
-                return "2"
+
+                return "QUESTION TWO"
+
             elif answer_number == 3:
+
                 return "3"
+
             elif answer_number == 4:
+
                 return "4"
+
             elif answer_number == 5:
+
                 return "5"
+
             elif answer_number == 6:
+
                 return "6"
+
             elif answer_number == 7:
+
                 return "7"
+
             elif answer_number == 8:
+
                 return "8"
+
             elif answer_number == 9:
+
                 return "9"
-        r = random.randint(1, 2)
+
+        r = random.randint(2, 2)
+
         question = get_answer(r)
+
         await client.send_message(message.channel, question)
-        if question == "1":
-            await client.send_message(message.channel, "Answer?")
-            if message.content.upper().startswith(".yes"):
-                await client.send_message(message.channel, "Correct")
-            else:
-                return
+
+        if r == 1:
+            answer = await client.wait_for_message(channel=message.channel, author=message.author)
+            if answer.content == "Alabama":
+                await client.send_message(message.channel, "You're correct! :tada:")
+            user_add_xp(user_id, 1)
+        elif r == 2:
+            answer = await client.wait_for_message(channel=message.channel, author=message.author)
+            if answer.content == "Alaska":
+                    await client.send_message(message.channel, "You're correct! :tada:")
+        else:
+            return
 
     elif message.content.startswith('.andrew'):
         await client.send_message(message.channel, 'Guess a number between 1 to 10')
@@ -178,9 +208,9 @@ async def on_message(message):
             return
         if int(andrew.content) == answer:
             await client.send_message(message.channel, 'You are right!')
+            user_add_xp(user_id, 5)
         else:
             await client.send_message(message.channel, 'Sorry. It is actually {}.'.format(answer))
-
 
     if message.content.lower().startswith(".xp"):
         await client.send_message(message.channel, "You have {} XP!".format(get_xp(message.author.id)))
