@@ -194,7 +194,7 @@ async def on_message(message):
                     if spin == 0:
                         if outcomes_formatted == "zero":
                             user_add_xp(user_id, int(bet_amount * 14))
-                            await client.send_message(message.channel, "Winner! :tada: You quattuordecuple up on "
+                            await client.send_message(message.channel, "Winner! :calepfp: You quattuordecuple up on "
                                                                        "xp for a total of `{}`!"
                                                       .format(get_xp(user_id)))
                             print("{0}: won on zero! {1}".format(get_time(), bet_amount))
@@ -207,7 +207,7 @@ async def on_message(message):
                         if spin % 2 == 0:
                             if outcomes_formatted == "even":
                                 user_add_xp(user_id, int(bet_amount * 2))
-                                await client.send_message(message.channel, "Winner! :tada: You doubled up on xp"
+                                await client.send_message(message.channel, "Winner! :calepfp: You doubled up on xp"
                                                                            " for a total of `{}`!"
                                                           .format(get_xp(user_id)))
                             else:
@@ -217,7 +217,7 @@ async def on_message(message):
                         else:
                             if outcomes_formatted == "odd":
                                 user_add_xp(user_id, int(bet_amount * 2))
-                                await client.send_message(message.channel, "Winner! :tada: You doubled up on xp"
+                                await client.send_message(message.channel, "Winner! :calepfp: You doubled up on xp"
                                                                            " for a total of `{}`!"
                                                           .format(get_xp(user_id)))
                             else:
@@ -244,11 +244,12 @@ async def on_message(message):
               'being added! {0.author.mention}'.format(message)
         await client.send_message(message.channel, msg)
     elif message.content.startswith('.bot'):
-        await client.send_message(message.channel, 'Do `.bot` for all possible commands. ')
-        await client.send_message(message.channel, 'Do `.info` for information about the server.')
-        await client.send_message(message.channel, 'Do `.ping` responds with PONG')
-        await client.send_message(message.channel, 'Do `.xp` to see the amount of xp you currently have.')
-        await client.send_message(message.channel, 'Do `.guess` to play a guessing game with the bot.')
+        await client.send_message(message.channel, ' Do `.bot` for all possible commands. '
+                                                   ' Do `.info` for info about the server. '
+                                                   ' Do `.ping` to play a little game of ping pong. '
+                                                   ' Do `.andrew` to play a little guessing game. '
+                                                   ' Do `.roulette` to play a game of roulette with your xp. '
+                                                   ' Do `.test` to see what features I am working on' )
 
     #State game
     elif message.content.startswith(".test"):
@@ -259,67 +260,103 @@ async def on_message(message):
 
             if answer_number == 1:
 
-                return "QUESTION ONE"
+                return "What state does Kevin Min live in?"
 
             elif answer_number == 2:
-
-                return "QUESTION TWO"
-
+                return "What state has only one official average on cubing usa for 3x3?"
             elif answer_number == 3:
-
-                return "3"
-
+                return "Besides West Virginia, what other state has a different state in its name?"
             elif answer_number == 4:
-
-                return "4"
-
+                return "The second competition in this state was held in Glendale, it was called _Showdown 2011"
             elif answer_number == 5:
-
-                return "5"
-
+                return "Which state had the first competition in the US"
             elif answer_number == 6:
-
-                return "6"
-
+                return "What state hosted 1 body cubing 2017?"
             elif answer_number == 7:
-
-                return "7"
-
+                return "Cubicle Labs intern usually lives in what state?"
             elif answer_number == 8:
-
-                return "8"
-
+                return "DRL's friend Wei lives in what state?"
             elif answer_number == 9:
+                return "The best cubing speller who's also good at feet lives in what state?"
+            elif answer_number == 10:
+                return "What state did Chris Hardwick move to?"
+            elif answer_number == 11:
+                return ""
 
-                return "9"
-
-        r = random.randint(2, 2)
-
+        r = random.randint(1, 12)
         question = get_answer(r)
-
         await client.send_message(message.channel, question)
 
         if r == 1:
             answer = await client.wait_for_message(channel=message.channel, author=message.author)
             if answer.content == "Alabama":
-                await client.send_message(message.channel, "You're correct! :tada:")
+                await client.send_message(message.channel, "You're correct! :calepfp:")
             user_add_xp(user_id, 1)
+
         elif r == 2:
             answer = await client.wait_for_message(channel=message.channel, author=message.author)
             if answer.content == "Alaska":
-                    await client.send_message(message.channel, "You're correct! :tada:")
-        elif r == 2:
+                    await client.send_message(message.channel, "You're correct! :calepfp:")
+
+        elif r == 3:
             answer = await client.wait_for_message(channel=message.channel, author=message.author)
-            if answer.content == "Alaska":
-                    await client.send_message(message.channel, "You're correct! :tada:")
-        elif r == 2:
+            if answer.content == "Arkansas":
+                    await client.send_message(message.channel, "You're correct! :calepfp:")
+
+        elif r == 4:
             answer = await client.wait_for_message(channel=message.channel, author=message.author)
-            if answer.content == "Alaska":
-                    await client.send_message(message.channel, "You're correct! :tada:")
-        elif r == 2:
+            if answer.content == "Arizona":
+                    await client.send_message(message.channel, "You're correct! :calepfp:")
+
+        elif r == 5:
             answer = await client.wait_for_message(channel=message.channel, author=message.author)
-            if answer.content == "Alaska":
-                    await client.send_message(message.channel, "You're correct! :tada:")
+            if answer.content == "California":
+                    await client.send_message(message.channel, "You're correct! :calepfp:")
+
+        elif r == 6:
+            answer = await client.wait_for_message(channel=message.channel, author=message.author)
+            if answer.content == "Colorado":
+                    await client.send_message(message.channel, "You're correct! :calepfp:")
+
+        elif r == 7:
+            answer = await client.wait_for_message(channel=message.channel, author=message.author)
+            if answer.content == "Connecticut":
+                    await client.send_message(message.channel, "You're correct! :calepfp:")
+
+        elif r == 8:
+            answer = await client.wait_for_message(channel=message.channel, author=message.author)
+            if answer.content == "Delaware":
+                    await client.send_message(message.channel, "You're correct! :calepfp:")
+
+        elif r == 9:
+            answer = await client.wait_for_message(channel=message.channel, author=message.author)
+            if answer.content == "Florida":
+                await client.send_message(message.channel, "You're correct! :calepfp:")
+
+        elif r == 10:
+            answer = await client.wait_for_message(channel=message.channel, author=message.author)
+            if answer.content == "Georgia":
+                await client.send_message(message.channel, "You're correct! :calepfp:")
+
+        elif r == 11:
+            answer = await client.wait_for_message(channel=message.channel, author=message.author)
+            if answer.content == "Hawaii":
+                await client.send_message(message.channel, "You're correct! :calepfp:")
+
+        elif r == 12:
+            answer = await client.wait_for_message(channel=message.channel, author=message.author)
+            if answer.content == "Florida":
+                await client.send_message(message.channel, "You're correct! :calepfp:")
+
+        elif r == 13:
+            answer = await client.wait_for_message(channel=message.channel, author=message.author)
+            if answer.content == "Florida":
+                await client.send_message(message.channel, "You're correct! :calepfp:")
+
+        elif r == 14:
+            answer = await client.wait_for_message(channel=message.channel, author=message.author)
+            if answer.content == "Florida":
+                await client.send_message(message.channel, "You're correct! :calepfp:")
         else:
             return
 
